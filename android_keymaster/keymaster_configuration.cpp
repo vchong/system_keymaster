@@ -86,6 +86,18 @@ uint32_t GetOsVersion(const char* version_str) {
         return 0;
     }
 
+    ALOGD("version_str = %s %u\n", version_str, *version_str);
+    /**
+     * master branch returns an uppercase alphabet instead of a proper
+     * version string, so convert it corresponding major number
+     * minor and subminor ignored
+     */
+    if (*version_str > 70 && *version_str < 91) {
+        ALOGD("Convert %s to corresponding version number\n", version_str);
+        ALOGD("version number = %u\n", (*version_str - 71) * 10000);
+        return (*version_str - 71) * 10000;
+    }
+
     regmatch_t matches[kPlatformVersionMatchCount];
     int not_match =
         regexec(&regex, version_str, kPlatformVersionMatchCount, matches, 0 /* flags */);
